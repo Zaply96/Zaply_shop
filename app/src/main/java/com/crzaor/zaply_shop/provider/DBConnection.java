@@ -214,6 +214,7 @@ public class DBConnection {
 
             try {
                 PreparedStatement pst = cn.prepareStatement("SELECT * FROM productos WHERE id_producto IN "+list);
+                System.out.println(list);
                 rs = pst.executeQuery();
 
             } catch (SQLException ex) {

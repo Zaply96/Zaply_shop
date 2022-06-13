@@ -18,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class DBController {
     DBConnection db = DBConnection.getInstance();
-    private static String ENCRYPT_KEY = "holadea";
+    private static final String ENCRYPT_KEY = "holadea";
 
 
 
@@ -32,8 +32,8 @@ public class DBController {
                 String name =  rs.getString("nombre");
                 String password = decrypt(rs.getString("contrasenya"));
                 String phone =  rs.getString("telefono");
-                List<Integer> favorites = (List<Integer>) rs.getArray("favorite_products");
-                List<Integer> card = (List<Integer>) rs.getArray("card_products");
+                ArrayList<Integer> favorites = (ArrayList<Integer>) rs.getArray("favorite_products");
+                ArrayList<Integer> card = (ArrayList<Integer>) rs.getArray("card_products");
                 user = new User(user_id,name,password,phone,email,favorites,card);
             }
         } catch (Exception ex) {
@@ -51,6 +51,7 @@ public class DBController {
         ResultSet rs = db.getUser(email);
         try {
             if (rs != null && rs.next() && !rs.wasNull()) {
+                System.out.println(rs.getInt("id_cliente"));
                 Array fav  = rs.getArray("favorite_products");
                 Object[] aux = (Object[]) fav.getArray();
                 for(Object i: aux){favorites.add(((Number)i).intValue());}
@@ -78,6 +79,7 @@ public class DBController {
         try {
             if (rs != null && rs.next() && !rs.wasNull()) {
                 Array fav  = rs.getArray("card_products");
+                if(fav == null){return new ArrayList<>();}
                 Object[] aux = (Object[]) fav.getArray();
                 for(Object i: aux){card_products.add(((Number)i).intValue());}
             }
