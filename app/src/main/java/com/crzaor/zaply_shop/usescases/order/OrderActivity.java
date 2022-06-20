@@ -138,6 +138,8 @@ public class OrderActivity extends AppCompatActivity implements Serializable {
         });
     }
 
+
+
     private boolean verifyContent(){
         for(EditText camp: camps){
             String text = camp.getText().toString().replace(" ","");
