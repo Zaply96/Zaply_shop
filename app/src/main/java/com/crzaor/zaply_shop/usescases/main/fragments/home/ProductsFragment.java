@@ -65,6 +65,9 @@ public class ProductsFragment extends Fragment implements LifecycleOwner {
         String email = sessionManager.getUserDetail().get("USER_ID");
         List<Integer> favorites = dbController.getFavoriteProductsID(email);
         List<Integer> card_products = dbController.getCardProductsId(email);
+
+
+
         this.adapter = new ProductsRecyclerAdapter(favorites, card_products);
         recyclerView = v.findViewById(R.id.recyclerHome);
         layoutManager = new LinearLayoutManager(getContext());
@@ -79,4 +82,6 @@ public class ProductsFragment extends Fragment implements LifecycleOwner {
 
         return v;
     }
+
+
 }

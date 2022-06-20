@@ -27,7 +27,7 @@ public class FavoritesViewModel extends AndroidViewModel {
     }
 
     public void updateFavorites(List<Integer> all_favorites){
-        this.all_favorites.postValue(all_favorites);
+        this.all_favorites.setValue(all_favorites);
         dbController.updateFavorites(email, all_favorites);
     }
 

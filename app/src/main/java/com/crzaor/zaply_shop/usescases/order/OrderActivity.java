@@ -4,11 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 
+import com.crzaor.zaply_shop.R;
 import com.crzaor.zaply_shop.databinding.ActivityOrderBinding;
 import com.crzaor.zaply_shop.model.Product;
 import com.crzaor.zaply_shop.usescases.main.MainActivity;
@@ -32,8 +40,8 @@ public class OrderActivity extends AppCompatActivity implements Serializable {
     private List<EditText> camps;
     private double total_cost = 0;
     List<Product> products = new ArrayList<>();
-//    private NotificationManager notificationManager;
-    private static Notificator notificator = new Notificator();
+    private NotificationManager notificationManager;
+//    private static Notificator notificator = new Notificator();
     private static final String channelId = "com.crzaor.zaply_shop.notificaciones";
     private static int notificacionId = 1;
 
@@ -45,8 +53,8 @@ public class OrderActivity extends AppCompatActivity implements Serializable {
 
         SessionManager sessionManager = new SessionManager(this);
 
-//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        createNotificationChannel(channelId, "Zaply Shop");
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        createNotificationChannel(channelId, "Zaply Shop");
 
         Intent intent = getIntent();
 
@@ -119,10 +127,10 @@ public class OrderActivity extends AppCompatActivity implements Serializable {
                 boolean inserted = dbController.insertOrder(user_id,name_reciever,Sdirection,Sphone,Snumcard,titular,date,Scvv,id_products,total_cost,"Pendiente");
 
                 if(inserted){
-                    notificator.sendNotification(v,"Compra realizada","¡Gracias por su compra, lo recibirá pronto!");
+                    sendNotification(v,"Compra realizada","¡Gracias por su compra, lo recibirá pronto!");
                     dbController.updateCard(email,new ArrayList<Integer>());
                     Intent intent2 = new Intent(this, MainActivity.class);
-                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent2);
                     finish();
                 }
@@ -156,27 +164,27 @@ public class OrderActivity extends AppCompatActivity implements Serializable {
 
         return true;
     }
-//    protected void createNotificationChannel(String channelId, String name) {
-//        int importancia = NotificationManager.IMPORTANCE_DEFAULT;
-//        NotificationChannel channel = new NotificationChannel(channelId, name, importancia);
-//        channel.setName("Zaply Shop notification");
-//        channel.enableVibration(true);
-//        channel.setVibrationPattern(new long[]{100, 200, 300});
-//        channel.enableLights(true);
-//        channel.setLightColor(Color.BLUE);
-//
-//        notificationManager.createNotificationChannel(channel);
-//    }
-//
-//    public void sendNotification(View v, String title, String message){
-//        Notification.Builder notificacion = new Notification.Builder(this, channelId)
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setContentTitle(title)
-//                .setContentText(message)
-//                .setNumber(3)
-//                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//                .setChannelId(channelId);
-//        notificationManager.notify(notificacionId, notificacion.build());
-//        notificacionId++;
-//    }
+    protected void createNotificationChannel(String channelId, String name) {
+        int importancia = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(channelId, name, importancia);
+        channel.setName("Zaply Shop notification");
+        channel.enableVibration(true);
+        channel.setVibrationPattern(new long[]{100, 200, 300});
+        channel.enableLights(true);
+        channel.setLightColor(Color.BLUE);
+
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    public void sendNotification(View v, String title, String message){
+        Notification.Builder notificacion = new Notification.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setNumber(3)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setChannelId(channelId);
+        notificationManager.notify(notificacionId, notificacion.build());
+        notificacionId++;
+    }
 }

@@ -32,9 +32,9 @@ public class DBController {
                 String name =  rs.getString("nombre");
                 String password = decrypt(rs.getString("contrasenya"));
                 String phone =  rs.getString("telefono");
-                ArrayList<Integer> favorites = (ArrayList<Integer>) rs.getArray("favorite_products");
-                ArrayList<Integer> card = (ArrayList<Integer>) rs.getArray("card_products");
-                user = new User(user_id,name,password,phone,email,favorites,card);
+//                ArrayList<Integer> favorites = (ArrayList<Integer>) rs.getArray("favorite_products");
+//                ArrayList<Integer> card = (ArrayList<Integer>) rs.getArray("card_products");
+                user = new User(user_id,name,password,phone,email,null,null);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
